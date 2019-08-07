@@ -10,14 +10,27 @@ class Moose < Formula
   depends_on "gcc"
   depends_on "llvm"
   depends_on "openmpi"
-  depends_on "moose-ccache"
+  depends_on "moose-petsc"
+  depends_on "moose-vtklite"
+  depends_on "moose-libmesh"
+  depends_on "moose-peacock"
 
   def install
     llvm_clang = File.join("#{Formula["llvm"].opt_prefix}", "bin")
+    petsc_path = "#{Formula["moose-petsc"].opt_prefix}"
+    libmesh_path = "#{Formula["moose-libmesh"].opt_prefix}"
+    vtk_path = "#{Formula["moose-vtklite"].opt_prefix}"
+    vtk_include = Dir["#{vtk_path}/include/vtk-*"].first
+    vtk_lib = "#{vtk_path}/lib"
     # Append to moose-dev-clang module rather than create it from scratch. This way, we satisify the formula's need to having download something
     # (all formulas must have a URL or other resource to download)
     moose_dev_clang_module = """
 prepend-path PATH #{llvm_clang}
+prepend-path INCLUDE_PATH #{vtk_include}
+setenv PETSC_DIR #{petsc_path}
+setenv LIBMESH_DIR #{libmesh_path}
+setenv VTKINCLUDE_DIR #{vtk_include}
+setenv VTKLIB_DIR #{vtk_lib}
 setenv CC mpicc
 setenv CXX mpicxx
 setenv FC mpif90
@@ -29,6 +42,23 @@ setenv F77 mpif77
     }
     cp "moose-dev-clang", "#{prefix}/moose-dev-clang"
 
+    # Create Peacock module
+    python_path = "#{Formula["moose-vtk"].opt_prefix}/lib/python2.7/site-packages"
+    peacock_module = """#%Module1.0#####################################################################
+proc ModulesHelp { } {
+  puts stderr \"Enables libraries needed for Peacock functionality.\"
+}
+if { ! [ info exists ::env(MOOSEPEACOCK) ] && [ module-info command load ] } {
+  puts stderr \"You must first run: `pip install numpy scipy matplotlib pandas`\"
+  puts stderr \"(and then reload your terminal) before using this feature\"
+  exit 0
+}
+prepend-path PYTHONPATH #{python_path}
+"""
+    open("#{prefix}/peacock", 'w') { |f|
+      f << peacock_module
+    }
+
     # Create moose_profile script
     moose_profile = """# MOOSE Framework sourcing script
 source #{Formula["modules"].opt_prefix}/init/bash
@@ -38,6 +68,12 @@ export MODULEPATH=$MODULEPATH:#{prefix}
 # if moose environment is available, load the module
 if [ -d #{Formula["moose"].opt_prefix} ]; then
   module load moose-dev-clang
+fi
+
+# check if user applied the additional commands necessary to run peacock
+if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ `pip list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"` -ge 4 ]; then
+  export MOOSEPEACOCK=true
+  module load peacock
 fi
 
 """
