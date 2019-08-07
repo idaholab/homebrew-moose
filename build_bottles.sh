@@ -30,6 +30,10 @@ if ! [ -d "Formula" ]; then
     printf "Formula directory not found. This script must be executed while in the homebrew-moose repository.\n"
     exit 1
 fi
+if [ -z "$BOTTLE_STORAGE" ]; then
+    printf "Unknown BOTTLE_STORAGE location\n"
+    exit 1
+fi
 
 # Get a topological sort of formulas we need to build
 FORMULAS=`./get_formulas.py`
@@ -97,7 +101,7 @@ for FORMULA in ${FORMULAS[@]}; do
 
     printf "${BOTTLE_SHA}, ${BOTTLE_NAME}\n"
     # Copy the bottle to rod for redistribution
-    print_and_run scp $BOTTLE_NAME rod.inl.gov:/raid/BREW_BOTTLES
-    print_and_run scp ${FORMULA}-${ARCH}.md5 rod.inl.gov:/raid/BREW_BOTTLES
+    print_and_run scp $BOTTLE_NAME $BOTTLE_STORAGE/
+    print_and_run scp ${FORMULA}-${ARCH}.md5 $BOTTLE_STORAGE/
     print_and_run rm -f $BOTTLE_NAME ${FORMULA}-${ARCH}.md5
 done

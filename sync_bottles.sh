@@ -24,7 +24,7 @@ function print_and_run()
 ##### Sanity Checks #####
 # This script can only work on rod or buildq1 (ssh access restrictions towards mooseframework.inl.gov)
 if [ `hostname` != "rod" ] && [ `hostname` != "buildq1" ]; then
-    printf "This script must run on either rod or cone\n"
+    printf "This script must run on either rod or buildq1\n"
     exit 1
 fi
 
@@ -70,7 +70,7 @@ for ARCH in ${SUPPORTED_ARCHS[@]}; do
         fi
 
         # Upload bottle to server
-        print_and_run rsync -raz ${BOTTLE_DIR}/${BOTTLE} mooseframework.inl.gov:/var/moose/source_packages/
+        print_and_run rsync -raz "${BOTTLE_DIR}/${BOTTLE}" mooseframework.inl.gov:/var/moose/source_packages/
         exitIfReturnCode $?
 
         # Modify Formula SHAs using in-place sed arguments
@@ -92,3 +92,12 @@ exitIfReturnCode $?
 # Update public bottles and formulas
 print_and_run git push origin master
 exitIfReturnCode $?
+
+# Upon successfull run, delete bottles from source
+for ARCH in ${SUPPORTED_ARCHS[@]}; do
+    for FORMULA in ${FORMULAS[@]}; do
+        BOTTLE=`cat $BOTTLE_DIR/${FORMULA}-${ARCH}.md5 | cut -d\  -f3`
+        if [ -f "${BOTTLE_DIR}/${FORMULA}-${ARCH}.md5" ]; then rm -f "${BOTTLE_DIR}/${FORMULA}-${ARCH}.md5"; fi
+        if [ -f "${BOTTLE_DIR}/$BOTTLE" ]; then rm -f "${BOTTLE_DIR}/$BOTTLE"; fi
+    done
+done
