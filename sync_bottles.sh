@@ -24,7 +24,7 @@ function print_and_run()
 ##### Sanity Checks #####
 # This script can only work on rod or buildq1 (ssh access restrictions towards mooseframework.inl.gov)
 if [ `hostname` != "rod" ] && [ `hostname` != "buildq1" ]; then
-    printf "This script must run on either rod or cone\n"
+    printf "This script must run on either rod or buildq1\n"
     exit 1
 fi
 
