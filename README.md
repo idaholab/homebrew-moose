@@ -28,3 +28,4 @@ In order to use [Peacock](https://mooseframework.org/application_usage/peacock.h
 ```bash
 pip install numpy scipy matplotlib pandas
 ```
+
