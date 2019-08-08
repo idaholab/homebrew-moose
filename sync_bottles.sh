@@ -33,6 +33,10 @@ if [ -z "$BOTTLE_DIR" ] || ! [ -d "$BOTTLE_DIR" ]; then
     printf "BOTTLE_DIR not set or found.\n"
     exit 1
 fi
+if [ -z "SERVER_DIR" ]; then
+    printf "SERVER_DIR not set.\n"
+    exit 1
+fi
 if [ -z "$SUPPORTED_ARCHS" ]; then
     printf "SUPPORTED ARCHS unknown\n"
     exit 1
@@ -44,14 +48,6 @@ fi
 
 # Populate supported formulas
 FORMULAS=`./get_formulas.py`
-exitIfReturnCode $?
-
-
-# Clean up git repo in preparation of commiting new hashes
-git clean -xfd
-git fetch origin
-exitIfReturnCode $?
-git reset --hard origin/devel
 exitIfReturnCode $?
 
 # Loop through supported bottle arches and adjust formula SHAs for each supported formula
@@ -70,7 +66,7 @@ for ARCH in ${SUPPORTED_ARCHS[@]}; do
         fi
 
         # Upload bottle to server
-        print_and_run rsync -raz "${BOTTLE_DIR}/${BOTTLE}" mooseframework.inl.gov:/var/moose/source_packages/
+        print_and_run rsync -raz "${BOTTLE_DIR}/${BOTTLE}" ${SERVER_DIR}
         exitIfReturnCode $?
 
         # Modify Formula SHAs using in-place sed arguments
@@ -89,15 +85,12 @@ done
 print_and_run git commit -a -m "Updating Bottles/Formulas/SHAs"
 exitIfReturnCode $?
 
+# Checkout master and merge devel
+print_and_run git checkout master
+exitIfReturnCode $?
+print_and_run git merge devel
+exitIfReturnCode $?
+
 # Update public bottles and formulas
 print_and_run git push origin master
 exitIfReturnCode $?
-
-# Upon successfull run, delete bottles from source
-for ARCH in ${SUPPORTED_ARCHS[@]}; do
-    for FORMULA in ${FORMULAS[@]}; do
-        BOTTLE=`cat $BOTTLE_DIR/${FORMULA}-${ARCH}.md5 | cut -d\  -f3`
-        if [ -f "${BOTTLE_DIR}/${FORMULA}-${ARCH}.md5" ]; then rm -f "${BOTTLE_DIR}/${FORMULA}-${ARCH}.md5"; fi
-        if [ -f "${BOTTLE_DIR}/$BOTTLE" ]; then rm -f "${BOTTLE_DIR}/$BOTTLE"; fi
-    done
-done
