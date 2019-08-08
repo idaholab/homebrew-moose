@@ -22,23 +22,13 @@ function print_and_run()
 }
 
 ##### Sanity Checks #####
-# This script can only work on rod or buildq1 (ssh access restrictions towards mooseframework.inl.gov)
-if [ `hostname` != "rod" ] && [ `hostname` != "buildq1" ]; then
-    printf "This script must run on either rod or buildq1\n"
-    exit 1
-fi
-
 # BOTTLE_DIR is populated by supported arch machines
 if [ -z "$BOTTLE_DIR" ] || ! [ -d "$BOTTLE_DIR" ]; then
     printf "BOTTLE_DIR not set or found.\n"
     exit 1
 fi
-if [ -z "SERVER_DIR" ]; then
-    printf "SERVER_DIR not set.\n"
-    exit 1
-fi
-if [ -z "$SUPPORTED_ARCHS" ]; then
-    printf "SUPPORTED ARCHS unknown\n"
+if [ -z "SERVER_DIR" ] || [ -z "$MID_SERVER" ] || [ -z "$SUPPORTED_ARCHS" ]; then
+    printf "Environment not set correctly.\n"
     exit 1
 fi
 if ! [ -d "Formula" ]; then
@@ -66,7 +56,7 @@ for ARCH in ${SUPPORTED_ARCHS[@]}; do
         fi
 
         # Upload bottle to server
-        print_and_run rsync -raz "${BOTTLE_DIR}/${BOTTLE}" ${SERVER_DIR}
+        print_and_run ssh -q "${MID_SERVER}" "rsync -razq --no-motd ${BOTTLE_DIR}/${BOTTLE}" "${SERVER_DIR}"
         exitIfReturnCode $?
 
         # Modify Formula SHAs using in-place sed arguments
