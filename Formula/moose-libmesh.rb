@@ -6,9 +6,9 @@ class MooseLibmesh < Formula
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "TBD" => :mojave
-    sha256 "TBD" => :high_sierra
-    sha256 "TBD" => :sierra
+    sha256 "a47ed87eb93c0019eb8ec3a5e8e22b0a3731fd6c5e237b28474f66eb84c623ad" => :mojave
+    sha256 "ecb81a0328dbb7a6fac88a846596d7c02ff6e044d7f0e594ac621bf442ba51fc" => :high_sierra
+    sha256 "d8fd21e29349147d96c213912d5214cd6d1d63e87452f018d61c52153c19d4a5" => :sierra
   end
 
   keg_only "we want to leverage moose_profile logic"

@@ -7,9 +7,9 @@ class MooseVtklite < Formula
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "TBD" => :mojave
-    sha256 "TBD" => :high_sierra
-    sha256 "TBD" => :sierra
+    sha256 "c11d91b76405016eb89cd3eef516eba81a468c93d0d6968dc4a058b47de8b9ad" => :mojave
+    sha256 "fe24f984aaf91f448077ed986b77cd218d48ee72c857c493a82af27178253dee" => :high_sierra
+    sha256 "c380e19974cc22a6357d1ee6f546938bb28bc764c3716dbc2e9fa430ec812e60" => :sierra
   end
 
   # encoding hint patch: https://gitlab.kitware.com/vtk/vtk/issues/17642
