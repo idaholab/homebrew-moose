@@ -67,3 +67,4 @@ class MoosePetsc < Formula
     assert (error >= 0.0 && error < 1.0e-13), "Error norm too large"
   end
 end
+

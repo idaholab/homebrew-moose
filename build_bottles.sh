@@ -39,6 +39,8 @@ fi
 FORMULAS=`./get_formulas.py`
 exitIfReturnCode $?
 
+printf "Building Bottles: $FORMULAS\n"
+
 # Get a topological reverse sort of formulas we need to uninstall
 REVERSE_FORMULAS=`./get_formulas.py --reverse`
 exitIfReturnCode $?

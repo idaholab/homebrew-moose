@@ -50,3 +50,4 @@ class MooseLibmesh < Formula
     system "make", "check"
   end
 end
+
