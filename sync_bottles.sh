@@ -69,7 +69,6 @@ for ARCH in ${SUPPORTED_ARCHS[@]}; do
             #     \/
             sed -i '' -e "s/sha256.*=> :${ARCH}/sha256 \"${SHA}\" => :${ARCH}/g" Formula/${FORMULA}.rb
         fi
-        exitIfReturnCode $?
     done
 done
 print_and_run git commit -a -m "Updating Bottles/Formulas/SHAs"
