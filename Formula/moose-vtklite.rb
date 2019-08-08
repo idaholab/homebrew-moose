@@ -57,3 +57,4 @@ class MooseVtklite < Formula
     system "#{bin}/vtkpython", "-c", "exit()"
   end
 end
+

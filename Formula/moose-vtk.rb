@@ -110,3 +110,4 @@ class MooseVtk < Formula
     system "#{bin}/vtkpython", "-c", "exit()"
   end
 end
+

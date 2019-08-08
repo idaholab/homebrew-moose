@@ -17,3 +17,4 @@ class MoosePeacock < Formula
     File.file?("#{prefix}/moose-peacock")
   end
 end
+
