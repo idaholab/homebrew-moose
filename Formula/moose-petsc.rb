@@ -7,6 +7,9 @@ class MoosePetsc < Formula
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
+    sha256 "TBD" => :mojave
+    sha256 "TBD" => :high_sierra
+    sha256 "TBD" => :sierra
   end
 
   keg_only "we want to leverage moose_profile logic"
