@@ -8,9 +8,9 @@ class MooseVtk < Formula
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "860de26ab7208698bf5a66a86c59a4d96142d76fd9cf895a7177b50f75fc6c5d" => :mojave
-    sha256 "898748460cd9a11cb4002a11ac9f8e1d6801a1a67bfdc4460c3a797d510da6e3" => :high_sierra
-    sha256 "71516c68a7de60ede5db8548039f2aa3dea866bf73610b49477269ddd61ab384" => :sierra
+    sha256 "72c47c788458742027e17fe507b8b75b2be9a402222c8015217ef2e6736f4248" => :mojave
+    sha256 "ff97e8aedca6e1c03955460889f24149ce2e545631ff1ae52084c804aaaac250" => :high_sierra
+    sha256 "47e9da6cfa2fe49205bc26c9cb07fc683e70f4efab69d375bd2f04d152a609c2" => :sierra
   end
 
   # encoding hint patch: https://gitlab.kitware.com/vtk/vtk/issues/17642
