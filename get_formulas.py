@@ -4,7 +4,7 @@ import sys, os, re, argparse, subprocess
 
 # Remove what has not been updated
 def getModified(args):
-    git_process = subprocess.Popen(['git', 'diff', '--name-only', 'HEAD~1'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    git_process = subprocess.Popen(['git', 'diff', '--name-only', 'master'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     file_list = git_process.communicate()[0].split()
     formula_files = []
     for f_file in file_list:
