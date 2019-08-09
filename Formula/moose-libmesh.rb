@@ -2,7 +2,7 @@ class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
   url "https://github.com/libmesh/libMesh.git", :revision => "f3dd9fee71b1f4636bc3ac8348aab6595984a223"
-  version "f3dd9fe-3"
+  version "f3dd9fe-4"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -41,7 +41,9 @@ class MooseLibmesh < Formula
            "--with-thread-model=openmp",
            "--disable-maintainer-mode",
            "--enable-petsc-hypre-required",
-           "--enable-metaphysicl-required"
+           "--enable-metaphysicl-required",
+           "--with-vtk-lib=#{vtk_lib}",
+           "--with-vtk-include=#{vtk_include}"
     system "make", "all"
     system "make", "install"
 
