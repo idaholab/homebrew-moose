@@ -39,6 +39,7 @@ fi
 # Populate supported formulas
 FORMULAS=`./get_formulas.py`
 exitIfReturnCode $?
+printf "Syncing bottles for formulas: ${FORMULAS}\n"
 
 # Loop through supported bottle arches and adjust formula SHAs for each supported formula
 # Be sure to error if we do not find a supported arch/bottle pair (something went wrong and
@@ -83,3 +84,12 @@ exitIfReturnCode $?
 # Update public bottles and formulas
 print_and_run git push origin master
 exitIfReturnCode $?
+
+# Clean Bottles
+for ARCH in ${SUPPORTED_ARCHS[@]}; do
+    for FORMULA in ${FORMULAS[@]}; do
+        BOTTLE=`cat $BOTTLE_DIR/${FORMULA}-${ARCH}.md5 | cut -d\  -f3`
+        if [ -f "${BOTTLE_DIR}/${BOTTLE}" ]; then rm -f "${BOTTLE_DIR}/${BOTTLE}"; fi
+        if [ -f "$BOTTLE_DIR/${FORMULA}-${ARCH}.md5" ]; then rm -f "$BOTTLE_DIR/${FORMULA}-${ARCH}.md5"; fi
+    done
+done
