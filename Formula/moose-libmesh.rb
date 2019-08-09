@@ -1,8 +1,8 @@
 class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
-  url "https://github.com/libmesh/libMesh.git", :revision => "f3dd9fee71b1f4636bc3ac8348aab6595984a223"
-  version "f3dd9fe-4"
+  url "https://github.com/libmesh/libMesh.git", :revision => "da98c0178b4d03f222d6b02c1a701eea8a38af5e"
+  version "da98c01-1"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -22,6 +22,7 @@ class MooseLibmesh < Formula
     vtk_path = "#{Formula["moose-vtklite"].opt_prefix}"
     vtk_include = Dir["#{vtk_path}/include/vtk-*"].first
     vtk_lib = "#{vtk_path}/lib"
+    methods = "opt dbg devel oprof"
     ENV["PETSC_DIR"] = "#{Formula["moose-petsc"].opt_prefix}"
     ENV["LDFLAGS"] = "-L#{Formula["llvm"].opt_prefix}/lib -Wl,-rpath,#{Formula["llvm"].opt_prefix}/lib"
     ENV["CPPFLAGS"] = "-I#{Formula["llvm"].opt_prefix}/include"
@@ -34,7 +35,7 @@ class MooseLibmesh < Formula
     ENV["F77"] = "mpif77"
     ENV["FC"] = "mpif90"
     system "./configure", "--prefix=#{prefix}",
-           "--with-methods=opt",
+           "--with-methods=#{methods}",
            "--enable-silent-rules",
            "--enable-unique-id",
            "--disable-warnings",
@@ -55,4 +56,3 @@ class MooseLibmesh < Formula
     system "make", "check"
   end
 end
-

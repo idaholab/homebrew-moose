@@ -3,7 +3,7 @@ class MoosePetsc < Formula
   homepage "https://www.mcs.anl.gov/petsc/"
   url "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.10.5.tar.gz"
   sha256 "3a81c8406410e0ffa8a3e9f8efcdf2e683cc40613c9bb5cb378a6498f595803e"
-  version "3.10.5-1"
+  version "3.10.5-2"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -70,4 +70,3 @@ class MoosePetsc < Formula
     assert (error >= 0.0 && error < 1.0e-13), "Error norm too large"
   end
 end
-

@@ -10,6 +10,7 @@ class Moose < Formula
   depends_on "gcc"
   depends_on "llvm"
   depends_on "openmpi"
+  depends_on "pkg-config"
   depends_on "moose-petsc"
   depends_on "moose-vtklite"
   depends_on "moose-libmesh"
