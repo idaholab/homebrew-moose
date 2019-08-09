@@ -47,6 +47,7 @@ printf "Syncing bottles for formulas: ${FORMULAS}\n"
 for ARCH in ${SUPPORTED_ARCHS[@]}; do
     printf "Updating bottles for ${ARCH}\n"
     for FORMULA in ${FORMULAS[@]}; do
+        CHANGE=true
         printf "Working on ${FORMULA}...\n"
         if [ -f "$BOTTLE_DIR/${FORMULA}-${ARCH}.md5" ]; then
             SHA=`cat $BOTTLE_DIR/${FORMULA}-${ARCH}.md5 | cut -d\  -f1`
@@ -72,8 +73,11 @@ for ARCH in ${SUPPORTED_ARCHS[@]}; do
         fi
     done
 done
-print_and_run git commit -a -m "Updating Bottles/Formulas/SHAs"
-exitIfReturnCode $?
+# Change requiring an additional commit (bottle sha)
+if [ -n "$CHANGE" ]; then
+    print_and_run git commit -a -m "Updating Bottles/Formulas/SHAs"
+    exitIfReturnCode $?
+fi
 
 MY_BRANCH=`git rev-parse --abbrev-ref HEAD`
 
