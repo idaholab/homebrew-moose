@@ -1,14 +1,14 @@
 class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
-  url "https://github.com/libmesh/libMesh.git", :revision => "f3dd9fee71b1f4636bc3ac8348aab6595984a223"
-  version "f3dd9fe-4"
+  url "https://github.com/libmesh/libMesh.git", :revision => "da98c0178b4d03f222d6b02c1a701eea8a38af5e"
+  version "da98c01-1"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "65e2971bd0480ef3eb36d443a0106d514aa864e0362af68f272d19348c106524" => :mojave
-    sha256 "43492444645328bdcbdec922de63e95d8f4cf3a05439a23e4b520dcc6da17c56" => :high_sierra
-    sha256 "16ee7a14a99b229c156be0d529c3d65703e9023fb807d9836f6259fc275556e4" => :sierra
+    sha256 "69289bb661421349a03331c5f4019059eb6d9fe74dd04cd750753b131614a8ab" => :mojave
+    sha256 "037cdcdec3bacb84b9ce1c76682a4311bb05bda27a41a85e8567e2f1b120ee5c" => :high_sierra
+    sha256 "6bf433f4dd677fa0a7e62da24877acbab6010068d0359f6db626a98c0a957e29" => :sierra
   end
 
   keg_only "we want to leverage moose_profile logic"
@@ -22,6 +22,7 @@ class MooseLibmesh < Formula
     vtk_path = "#{Formula["moose-vtklite"].opt_prefix}"
     vtk_include = Dir["#{vtk_path}/include/vtk-*"].first
     vtk_lib = "#{vtk_path}/lib"
+    methods = "opt dbg devel oprof"
     ENV["PETSC_DIR"] = "#{Formula["moose-petsc"].opt_prefix}"
     ENV["LDFLAGS"] = "-L#{Formula["llvm"].opt_prefix}/lib -Wl,-rpath,#{Formula["llvm"].opt_prefix}/lib"
     ENV["CPPFLAGS"] = "-I#{Formula["llvm"].opt_prefix}/include"
@@ -34,7 +35,7 @@ class MooseLibmesh < Formula
     ENV["F77"] = "mpif77"
     ENV["FC"] = "mpif90"
     system "./configure", "--prefix=#{prefix}",
-           "--with-methods=opt",
+           "--with-methods=#{methods}",
            "--enable-silent-rules",
            "--enable-unique-id",
            "--disable-warnings",
@@ -55,4 +56,3 @@ class MooseLibmesh < Formula
     system "make", "check"
   end
 end
-

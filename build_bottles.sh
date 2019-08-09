@@ -88,7 +88,7 @@ for FORMULA in ${FORMULAS[@]}; do
         printf "There was an error building bottle: $FORMULA"
         exitIfReturnCode 1
     fi
-    print_and_run brew bottle --root-url="https://mooseframework.org/source_packages" --no-rebuild --skip-relocation ${FORMULA}
+    print_and_run brew bottle --root-url="https://mooseframework.org/source_packages" --no-rebuild ${FORMULA}
     exitIfReturnCode $?
 
     # Unfortunately, brew bottle creates a file name with an extra dash in the name
