@@ -75,17 +75,19 @@ done
 print_and_run git commit -a -m "Updating Bottles/Formulas/SHAs"
 exitIfReturnCode $?
 
-# Checkout master and merge devel
+MY_BRANCH=`git rev-parse --abbrev-ref HEAD`
+
+# Checkout master and merge modified branch
 print_and_run git checkout master
 exitIfReturnCode $?
-print_and_run git merge devel
+print_and_run git merge ${MY_BRANCH}
 exitIfReturnCode $?
 
 # Update public bottles and formulas
 print_and_run git push origin master
 exitIfReturnCode $?
 
-# Clean Bottles
+# Clean Bottles only after a successful merge (so we can invalidate and re-run this target if need be)
 for ARCH in ${SUPPORTED_ARCHS[@]}; do
     for FORMULA in ${FORMULAS[@]}; do
         BOTTLE=`cat $BOTTLE_DIR/${FORMULA}-${ARCH}.md5 | cut -d\  -f3`
