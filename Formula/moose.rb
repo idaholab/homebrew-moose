@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 5
+  revision 6
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -55,7 +55,7 @@ if { ! [ info exists ::env(MOOSEPEACOCK) ] && [ module-info command load ] } {
   puts stderr \"(and then reload your terminal) before using this feature\"
   exit 0
 }
-conflicts peacock3
+conflict peacock3
 prepend-path PYTHONPATH #{python_path}
 """
     open("#{prefix}/peacock", 'w') { |f|
@@ -73,7 +73,7 @@ if { ! [ info exists ::env(MOOSEPEACOCK3) ] && [ module-info command load ] } {
   puts stderr \"(and then reload your terminal) before using this feature\"
   exit 0
 }
-conflicts peacock
+conflict peacock
 prepend-path PYTHONPATH #{python3_path}
 """
     open("#{prefix}/peacock3", 'w') { |f|
