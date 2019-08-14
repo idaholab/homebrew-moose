@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 4
+  revision 5
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -98,7 +98,7 @@ if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ `pip list 2>/dev/null | gr
 fi
 
 # check if user applied the additional commands necessary to run peacock3
-if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ `pip list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"` -ge 4 ]; then
+if [ -d #{Formula["moose-peacock3"].opt_prefix} ] && [ `pip3 list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"` -ge 4 ]; then
   export MOOSEPEACOCK3=true
 fi
 
