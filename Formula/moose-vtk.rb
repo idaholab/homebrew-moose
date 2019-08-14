@@ -4,7 +4,7 @@ class MooseVtk < Formula
   url "https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz"
   sha256 "34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb"
   head "https://github.com/Kitware/VTK.git"
-  revision 4
+  revision 5
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
