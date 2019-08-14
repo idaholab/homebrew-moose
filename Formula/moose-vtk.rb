@@ -4,7 +4,7 @@ class MooseVtk < Formula
   url "https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz"
   sha256 "34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb"
   head "https://github.com/Kitware/VTK.git"
-  revision 3
+  revision 4
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -19,6 +19,7 @@ class MooseVtk < Formula
     sha256 "a0a99f242e4bd577270339c80415d3c9825b1894bca90c57645dc1bce7d3f4b8"
   end
 
+  keg_only "we want to leverage modules"
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "fontconfig"
