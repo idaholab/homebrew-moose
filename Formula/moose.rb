@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 3
+  revision 4
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -55,9 +55,28 @@ if { ! [ info exists ::env(MOOSEPEACOCK) ] && [ module-info command load ] } {
   puts stderr \"(and then reload your terminal) before using this feature\"
   exit 0
 }
+conflicts peacock3
 prepend-path PYTHONPATH #{python_path}
 """
     open("#{prefix}/peacock", 'w') { |f|
+      f << peacock_module
+    }
+
+    # Create Peacock3 module
+    python3_path = "#{Formula["vtk"].opt_prefix}/lib/python3.7/site-packages"
+    peacock_module = """#%Module1.0#####################################################################
+proc ModulesHelp { } {
+  puts stderr \"Enables libraries needed for Peacock functionality.\"
+}
+if { ! [ info exists ::env(MOOSEPEACOCK3) ] && [ module-info command load ] } {
+  puts stderr \"You must first run: `pip3 install numpy scipy matplotlib pandas`\"
+  puts stderr \"(and then reload your terminal) before using this feature\"
+  exit 0
+}
+conflicts peacock
+prepend-path PYTHONPATH #{python3_path}
+"""
+    open("#{prefix}/peacock3", 'w') { |f|
       f << peacock_module
     }
 
@@ -76,6 +95,11 @@ fi
 if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ `pip list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"` -ge 4 ]; then
   export MOOSEPEACOCK=true
   module load peacock
+fi
+
+# check if user applied the additional commands necessary to run peacock3
+if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ `pip list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"` -ge 4 ]; then
+  export MOOSEPEACOCK3=true
 fi
 
 """
