@@ -2,18 +2,18 @@ class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
   url "https://github.com/libmesh/libMesh.git", :revision => "da98c0178b4d03f222d6b02c1a701eea8a38af5e"
-  version "da98c01-3"
+  version "da98c01-4"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "ab23e17c58818d151a9c6b8e63b5013618c223d8f4225f3c4447fafdd78e7c52" => :mojave
-    sha256 "ff8f3a5e679c1ea889aa520a1c3fc9c739d217c42846af5f3153d27dd09fd733" => :high_sierra
-    sha256 "b51501dadf16959bc0bd7c6f136589723d9c1c9478dc21950f9879480900f536" => :sierra
+    sha256 "b697f17bcde5cddbb8b321b3c61b4b55f440710bfbf72a9303678ceeff0f8798" => :mojave
+    sha256 "80b4402f7ae8636cbd3c86512e89848cf6344c4451be3e90f8957622107fc97a" => :high_sierra
+    sha256 "cb2e2f8fd7cf7503774477330459843f460acb899361ed0e12391c1951e5939d" => :sierra
   end
 
   keg_only "we want to leverage moose_profile logic"
-  depends_on "gcc"
-  depends_on "llvm"
+  depends_on "gcc@8"
+  depends_on "llvm@7"
   depends_on "openmpi"
   depends_on "moose-petsc"
   depends_on "moose-vtklite"
