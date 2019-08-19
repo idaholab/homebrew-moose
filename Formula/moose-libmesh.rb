@@ -2,7 +2,7 @@ class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
   url "https://github.com/libmesh/libMesh.git", :revision => "da98c0178b4d03f222d6b02c1a701eea8a38af5e"
-  version "da98c01-3"
+  version "da98c01-4"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -12,8 +12,8 @@ class MooseLibmesh < Formula
   end
 
   keg_only "we want to leverage moose_profile logic"
-  depends_on "gcc"
-  depends_on "llvm"
+  depends_on "gcc@8"
+  depends_on "llvm@7"
   depends_on "openmpi"
   depends_on "moose-petsc"
   depends_on "moose-vtklite"

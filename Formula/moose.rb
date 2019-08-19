@@ -3,12 +3,12 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 6
+  revision 7
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
-  depends_on "gcc"
-  depends_on "llvm"
+  depends_on "gcc@8"
+  depends_on "llvm@7"
   depends_on "openmpi"
   depends_on "pkg-config"
   depends_on "moose-petsc"
