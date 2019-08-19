@@ -74,6 +74,12 @@ for FORMULA in ${REVERSE_FORMULAS[@]}; do
     print_and_run brew uninstall $FORMULA
 done
 
+# Update/Upgrade brew before building bottles
+print_and_run brew update
+exitIfReturnCode $?
+print_and_run brew upgrade
+exitIfReturnCode $?
+
 # Remove previous tap
 print_and_run rm -rf /usr/local/Homebrew/Library/Taps/idaholab
 
