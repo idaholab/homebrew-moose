@@ -3,7 +3,7 @@ class MoosePetsc < Formula
   homepage "https://www.mcs.anl.gov/petsc/"
   url "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.11.3.tar.gz"
   sha256 "199ad9650a9f58603b49e7fff7cd003ceb03aa231e5d37d0bf0496c6348eca81"
-  version "3.11.3-3"
+  version "3.11.3-4"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -20,9 +20,9 @@ class MoosePetsc < Formula
   depends_on "openmpi"
 
   def install
-    ENV.prepend "PATH", "#{Formula["llvm"].opt_prefix}/bin", ":"
-    ENV["LDFLAGS"] = "-L#{Formula["llvm"].opt_prefix}/lib -Wl,-rpath,#{Formula["llvm"].opt_prefix}/lib"
-    ENV["CPPFLAGS"] = "-I#{Formula["llvm"].opt_prefix}/include"
+    ENV.prepend "PATH", "#{Formula["llvm@7"].opt_prefix}/bin:#{Formula["gcc@8"].opt_prefix}/bin", ":"
+    ENV["LDFLAGS"] = "-L#{Formula["llvm@7"].opt_prefix}/lib -Wl,-rpath,#{Formula["llvm@7"].opt_prefix}/lib"
+    ENV["CPPFLAGS"] = "-I#{Formula["llvm@7"].opt_prefix}/include"
     ENV["CC"] = "mpicc"
     ENV["CXX"] = "mpicxx"
     ENV["F77"] = "mpif77"
