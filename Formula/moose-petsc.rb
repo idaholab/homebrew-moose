@@ -3,13 +3,13 @@ class MoosePetsc < Formula
   homepage "https://www.mcs.anl.gov/petsc/"
   url "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.11.3.tar.gz"
   sha256 "199ad9650a9f58603b49e7fff7cd003ceb03aa231e5d37d0bf0496c6348eca81"
-  version "3.11.3-3"
+  version "3.11.3-4"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "14f7ae8edb25611de49fabc1358e795b70288c88016ad6ebbb04dc405d42b445" => :mojave
-    sha256 "87c1241e960b868b9c8ba2031c476ffc62460a3e4f19a57fbc247d31f79dd305" => :high_sierra
-    sha256 "4d94889a1f8c640ed4b178d0d0e3e64e63b14c0f2129870e764339db7d9c29e6" => :sierra
+    sha256 "4bbfb430a2fd1572d8e28e2c2c655b61f240470674d8ac372b226e75d0b84fe6" => :mojave
+    sha256 "5d4ca20b5fcbec9096c20dfe16363d95ed9e4904ea317afc6b97dc5e167ffbb4" => :high_sierra
+    sha256 "451272202fac9877dff1a16b9385a40bd422e251215180b0eff5f043c0f2b90e" => :sierra
   end
 
   keg_only "we want to leverage moose_profile logic"
@@ -20,9 +20,9 @@ class MoosePetsc < Formula
   depends_on "openmpi"
 
   def install
-    ENV.prepend "PATH", "#{Formula["llvm"].opt_prefix}/bin", ":"
-    ENV["LDFLAGS"] = "-L#{Formula["llvm"].opt_prefix}/lib -Wl,-rpath,#{Formula["llvm"].opt_prefix}/lib"
-    ENV["CPPFLAGS"] = "-I#{Formula["llvm"].opt_prefix}/include"
+    ENV.prepend "PATH", "#{Formula["llvm@7"].opt_prefix}/bin:#{Formula["gcc@8"].opt_prefix}/bin", ":"
+    ENV["LDFLAGS"] = "-L#{Formula["llvm@7"].opt_prefix}/lib -Wl,-rpath,#{Formula["llvm@7"].opt_prefix}/lib"
+    ENV["CPPFLAGS"] = "-I#{Formula["llvm@7"].opt_prefix}/include"
     ENV["CC"] = "mpicc"
     ENV["CXX"] = "mpicxx"
     ENV["F77"] = "mpif77"
