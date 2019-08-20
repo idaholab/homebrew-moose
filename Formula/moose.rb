@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 8
+  revision 9
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -17,7 +17,8 @@ class Moose < Formula
   depends_on "moose-peacock"
 
   def install
-    llvm_clang = File.join("#{Formula["llvm"].opt_prefix}", "bin")
+    llvm_clang = File.join("#{Formula["llvm@7"].opt_prefix}", "bin")
+    gcc_gfortran = File.join("#{Formula["gcc@8"].opt_prefix}", "bin")
     petsc_path = "#{Formula["moose-petsc"].opt_prefix}"
     libmesh_path = "#{Formula["moose-libmesh"].opt_prefix}"
     vtk_path = "#{Formula["moose-vtklite"].opt_prefix}"
@@ -26,7 +27,7 @@ class Moose < Formula
     # Append to moose-dev-clang module rather than create it from scratch. This way, we satisify the formula's need to having download something
     # (all formulas must have a URL or other resource to download)
     moose_dev_clang_module = """
-prepend-path PATH #{llvm_clang}
+prepend-path PATH #{llvm_clang}:#{gcc_gfortran}
 prepend-path INCLUDE_PATH #{vtk_include}
 setenv PETSC_DIR #{petsc_path}
 setenv LIBMESH_DIR #{libmesh_path}

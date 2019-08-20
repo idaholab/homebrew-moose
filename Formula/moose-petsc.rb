@@ -7,9 +7,9 @@ class MoosePetsc < Formula
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "a139c62e2ef9570f000a76604cc2d630accb4d77cf2a9e3f968753a1fe6f8bdc" => :mojave
-    sha256 "8f8480108e0c047db42dc5778ba8c21889cdd59d52a85d23baf8a98322be4265" => :high_sierra
-    sha256 "b4952ae978febe2e5f6556e479828d403f74ee710d6846b15840a34b2bd77cab" => :sierra
+    sha256 "4852ae56a1ae369e73a8da041962d54ac1e0e64c32f5ddd7327bf6d08b60c190" => :mojave
+    sha256 "dba5681208b7b991b9f586f4413f6f9bba12dca773eaa91e4bbe2448569d4294" => :high_sierra
+    sha256 "e42d26dec6cb3d91dd263c2631e53c2197de488eaa93bbb17ed101e73c0d437e" => :sierra
   end
 
   keg_only "we want to leverage moose_profile logic"
