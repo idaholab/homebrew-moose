@@ -2,7 +2,7 @@ class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
   url "https://github.com/libmesh/libMesh.git", :revision => "da98c0178b4d03f222d6b02c1a701eea8a38af5e"
-  version "da98c01-5"
+  version "da98c01-6"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -26,7 +26,8 @@ class MooseLibmesh < Formula
     ENV["PETSC_DIR"] = "#{Formula["moose-petsc"].opt_prefix}"
     ENV["LDFLAGS"] = "-L#{Formula["llvm@7"].opt_prefix}/lib -Wl,-rpath,#{Formula["llvm@7"].opt_prefix}/lib"
     ENV["CPPFLAGS"] = "-I#{Formula["llvm@7"].opt_prefix}/include"
-    ENV.prepend "PATH", "#{Formula["llvm@7"].opt_prefix}/bin", ":"
+    ENV["OMPI_FC"] = "gfortran-8"
+    ENV.prepend "PATH", "#{Formula["llvm@7"].opt_prefix}/bin:#{Formula["gcc@8"].opt_prefix}/bin", ":"
     ENV.prepend "VTKINCLUDE_DIR", "#{vtk_include}"
     ENV.prepend "VTKLIB_DIR", "#{vtk_lib}"
     ENV.prepend "INCLUDE_DIR", "#{vtk_include}"
