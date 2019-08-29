@@ -1,8 +1,8 @@
 class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
-  url "https://github.com/libmesh/libMesh.git", :revision => "da98c0178b4d03f222d6b02c1a701eea8a38af5e"
-  version "da98c01-6"
+  url "https://github.com/libmesh/libMesh.git", :revision => "ca543b0a6d9af487d4b7d1e64b890aa777a3bb9c"
+  version "ca543b0-1"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"

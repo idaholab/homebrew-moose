@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 9
+  revision 10
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -11,8 +11,6 @@ class Moose < Formula
   depends_on "llvm@7"
   depends_on "openmpi"
   depends_on "pkg-config"
-  depends_on "moose-petsc"
-  depends_on "moose-vtklite"
   depends_on "moose-libmesh"
   depends_on "moose-peacock"
 
@@ -46,6 +44,10 @@ setenv F77 mpif77
     }
     cp "moose-dev-clang", "#{prefix}/moose-dev-clang"
 
+    # Get Major/Minor python version for VTK/lib python directory
+    pyver = Language::Python.major_minor_version "python3"
+    py_prefix = Formula["python3"].opt_frameworks/"Python.framework/Versions/#{pyver}"
+
     # Create Peacock module
     python_path = "#{Formula["moose-vtk"].opt_prefix}/lib/python2.7/site-packages"
     peacock_module = """#%Module1.0#####################################################################
@@ -65,7 +67,7 @@ prepend-path PYTHONPATH #{python_path}
     }
 
     # Create Peacock3 module
-    python3_path = "#{Formula["vtk"].opt_prefix}/lib/python3.7/site-packages"
+    python3_path = "#{Formula["vtk"].opt_prefix}/lib/python#{pyver}/site-packages"
     peacock_module = """#%Module1.0#####################################################################
 proc ModulesHelp { } {
   puts stderr \"Enables libraries needed for Peacock functionality.\"
@@ -82,6 +84,25 @@ prepend-path PYTHONPATH #{python3_path}
       f << peacock_module
     }
 
+    # Create vtk-mesa (off screen rendering) module
+    vtkmesa_path = "#{Formula["moose-vtkmesa"].opt_prefix}/lib/python#{pyver}/site-packages"
+    vtkmesa_module = """#%Module1.0#####################################################################
+proc ModulesHelp { } {
+  puts stderr \"Enables libraries needed for off-screen ImageDiff functionality.\"
+  puts stderr \"Only useful to MOOSE GUI developers.\"
+}
+if { ! [ info exists ::env(MESA_OFFSCREEN) ] && [ module-info command load ] } {
+  puts stderr \"You must first run: `pip3 install numpy scipy matplotlib pandas`\"
+  puts stderr \"(and then reload your terminal) before using this feature\"
+  exit 0
+}
+conflict peacock peacock3
+prepend-path PYTHONPATH #{vtkmesa_path}
+"""
+    open("#{prefix}/mesa-offscreen", 'w') { |f|
+      f << vtkmesa_module
+    }
+
     # Create moose_profile script
     moose_profile = """# MOOSE Framework sourcing script
 source #{Formula["modules"].opt_prefix}/init/bash
@@ -93,17 +114,32 @@ if [ -d #{Formula["moose"].opt_prefix} ]; then
   module load moose-dev-clang
 fi
 
-# check if user applied the additional commands necessary to run peacock
-if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ `pip list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"` -ge 4 ]; then
+# Default to Python3, if available
+if [ -d #{Formula["moose-peacock3"].opt_prefix} ] || [ -d #{Formula["moose-vtkmesa"].opt_prefix} ]; then
+  PIP='pip3'
+elif [ -d #{Formula["moose-peacock"].opt_prefix} ]; then
+  PIP='pip'
+fi
+
+if [ -n \"$PIP\" ]; then
+  GUI=`$PIP list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"`
+else
+  GUI=0
+fi
+
+# check if user applied the additional commands necessary to run Peacock
+if [ -d #{Formula["moose-peacock3"].opt_prefix} ] && [ $GUI -ge 4 ]; then
+  export MOOSEPEACOCK3=true
+  module load peacock3
+elif [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ $GUI -ge 4 ]; then
   export MOOSEPEACOCK=true
   module load peacock
 fi
 
-# check if user applied the additional commands necessary to run peacock3
-if [ -d #{Formula["moose-peacock3"].opt_prefix} ] && [ `pip3 list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"` -ge 4 ]; then
-  export MOOSEPEACOCK3=true
+# check if user applied the additional commands necessary to run mesa-offscreen
+if [ -d #{Formula["moose-vtkmesa"].opt_prefix} ] && [ $GUI -ge 4 ]; then
+  export MESA_OFFSCREEN=true
 fi
-
 """
     open("#{prefix}/moose_profile.sh", 'w') { |f|
       f << moose_profile
