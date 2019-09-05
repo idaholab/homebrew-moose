@@ -7,9 +7,9 @@ class MooseMesa < Formula
   version "18.2.8-1"
 
   bottle do
-    sha256 "TBD" => :mojave
-    sha256 "TBD" => :high_sierra
-    sha256 "TBD" => :sierra
+    sha256 "4d0729f198648e9c4cda736eb44619ffd7deb097b5cb2520a4bf211311ac6717" => :mojave
+    sha256 "f8f9a30d41adec1e1458b7db46d28f7d93a590dc8932855c9ecc65e5811f36f8" => :high_sierra
+    sha256 "ad065f014ee96c4399278374db04bb1f4f4c6451cf083c8534a266ba030111ef" => :sierra
   end
 
   depends_on "pkg-config" => :build
