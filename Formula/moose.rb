@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 10
+  revision 11
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -67,14 +67,18 @@ prepend-path PYTHONPATH #{python_path}
     }
 
     # Create Peacock3 module
-    python3_path = "#{Formula["vtk"].opt_prefix}/lib/python#{pyver}/site-packages"
+    # Correct the site-packages path until https://github.com/Homebrew/homebrew-core/issues/43953 is solved
+    python3_path = "#{Formula["vtk"].opt_prefix}/lib/usr/local/Cellar/vtk/8.2.0_2/lib/python3/site-packages"
     peacock_module = """#%Module1.0#####################################################################
 proc ModulesHelp { } {
   puts stderr \"Enables libraries needed for Peacock functionality.\"
 }
 if { ! [ info exists ::env(MOOSEPEACOCK3) ] && [ module-info command load ] } {
-  puts stderr \"You must first run: `pip3 install numpy scipy matplotlib pandas`\"
-  puts stderr \"(and then reload your terminal) before using this feature\"
+  puts stderr \"In order to use Peacock (python3), perform the following:\"
+  puts stderr \"\n\t`brew install moose-peacock3`\"
+  puts stderr \"\t`pip3 install numpy scipy matplotlib pandas`\n\"
+  puts stderr \"Once complete, reload your terminals and verify this module\"
+  puts stderr \"is loaded using `module list`.\"
   exit 0
 }
 conflict peacock
@@ -145,12 +149,6 @@ fi
       f << moose_profile
     }
   end
-
-  test do
-    File.file?("#{prefix}/moose-dev-clang")
-    File.file?("#{prefix}/moose_profile.sh")
-  end
-
   def caveats
     <<~EOS
       You must now source the moose_profile.sh script to activate the environment:
@@ -163,5 +161,9 @@ fi
          echo "if [ -f #{prefix}/moose_profile.sh ]; then source #{prefix}/moose_profile.sh; fi" >> ~/.bash_profile
 
     EOS
+  end
+  test do
+    File.file?("#{prefix}/moose-dev-clang")
+    File.file?("#{prefix}/moose_profile.sh")
   end
 end

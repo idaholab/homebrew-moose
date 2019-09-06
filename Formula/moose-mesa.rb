@@ -8,9 +8,9 @@ class MooseMesa < Formula
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
-    sha256 "4d0729f198648e9c4cda736eb44619ffd7deb097b5cb2520a4bf211311ac6717" => :mojave
-    sha256 "f8f9a30d41adec1e1458b7db46d28f7d93a590dc8932855c9ecc65e5811f36f8" => :high_sierra
-    sha256 "ad065f014ee96c4399278374db04bb1f4f4c6451cf083c8534a266ba030111ef" => :sierra
+    sha256 "6df764b6da8c866bdbee05f13837b1f27f794623af497dbab997768c83432a88" => :mojave
+    sha256 "66dd4d987b985d8647169d98e30cbc03a55b2b1b83479ccce313a8577a1328b9" => :high_sierra
+    sha256 "5832efface174697c4638206f559be86e91fa96adb5925e14b50c10fcc2b42c2" => :sierra
   end
 
   depends_on "pkg-config" => :build
