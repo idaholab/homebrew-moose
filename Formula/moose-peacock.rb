@@ -1,4 +1,4 @@
-class MoosePeacock < Formula
+class MoosePeacock3 < Formula
   desc "MOOSE Framework"
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-peacock.tar.gz"
