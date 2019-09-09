@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 11
+  revision 12
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -49,31 +49,14 @@ setenv F77 mpif77
     py_prefix = Formula["python3"].opt_frameworks/"Python.framework/Versions/#{pyver}"
 
     # Create Peacock module
-    python_path = "#{Formula["moose-vtk"].opt_prefix}/lib/python2.7/site-packages"
+    # Correct the site-packages path until https://github.com/Homebrew/homebrew-core/issues/43953 is solved
+    python_path = "#{Formula["vtk"].opt_prefix}/lib/usr/local/Cellar/vtk/8.2.0_2/lib/python3/site-packages"
+    # python_path = "#{Formula["vtk"].opt_prefix}/lib/python#{pyver}/site-packages"
     peacock_module = """#%Module1.0#####################################################################
 proc ModulesHelp { } {
   puts stderr \"Enables libraries needed for Peacock functionality.\"
 }
 if { ! [ info exists ::env(MOOSEPEACOCK) ] && [ module-info command load ] } {
-  puts stderr \"You must first run: `pip install numpy scipy matplotlib pandas`\"
-  puts stderr \"(and then reload your terminal) before using this feature\"
-  exit 0
-}
-conflict peacock3
-prepend-path PYTHONPATH #{python_path}
-"""
-    open("#{prefix}/peacock", 'w') { |f|
-      f << peacock_module
-    }
-
-    # Create Peacock3 module
-    # Correct the site-packages path until https://github.com/Homebrew/homebrew-core/issues/43953 is solved
-    python3_path = "#{Formula["vtk"].opt_prefix}/lib/usr/local/Cellar/vtk/8.2.0_2/lib/python3/site-packages"
-    peacock_module = """#%Module1.0#####################################################################
-proc ModulesHelp { } {
-  puts stderr \"Enables libraries needed for Peacock functionality.\"
-}
-if { ! [ info exists ::env(MOOSEPEACOCK3) ] && [ module-info command load ] } {
   puts stderr \"In order to use Peacock (python3), perform the following:\"
   puts stderr \"\n\t`brew install moose-peacock3`\"
   puts stderr \"\t`pip3 install numpy scipy matplotlib pandas`\n\"
@@ -81,10 +64,9 @@ if { ! [ info exists ::env(MOOSEPEACOCK3) ] && [ module-info command load ] } {
   puts stderr \"is loaded using `module list`.\"
   exit 0
 }
-conflict peacock
-prepend-path PYTHONPATH #{python3_path}
+prepend-path PYTHONPATH #{python_path}
 """
-    open("#{prefix}/peacock3", 'w') { |f|
+    open("#{prefix}/peacock", 'w') { |f|
       f << peacock_module
     }
 
@@ -96,11 +78,14 @@ proc ModulesHelp { } {
   puts stderr \"Only useful to MOOSE GUI developers.\"
 }
 if { ! [ info exists ::env(MESA_OFFSCREEN) ] && [ module-info command load ] } {
-  puts stderr \"You must first run: `pip3 install numpy scipy matplotlib pandas`\"
-  puts stderr \"(and then reload your terminal) before using this feature\"
+  puts stderr \"In order to use off-screen rendering, perform the following:\"
+  puts stderr \"\n\t`brew install moose-vtkmesa`\"
+  puts stderr \"\t`pip3 install numpy scipy matplotlib pandas`\n\"
+  puts stderr \"Once complete, reload your terminals and load this module again.\"
+  puts stderr \"It may also first be necessary to unload the peacock module.\"
   exit 0
 }
-conflict peacock peacock3
+conflict peacock
 prepend-path PYTHONPATH #{vtkmesa_path}
 """
     open("#{prefix}/mesa-offscreen", 'w') { |f|
@@ -118,13 +103,12 @@ if [ -d #{Formula["moose"].opt_prefix} ]; then
   module load moose-dev-clang
 fi
 
-# Default to Python3, if available
+# Determine if VTK/Peacock, can load or can be loaded
 if [ -d #{Formula["moose-peacock3"].opt_prefix} ] || [ -d #{Formula["moose-vtkmesa"].opt_prefix} ]; then
   PIP='pip3'
-elif [ -d #{Formula["moose-peacock"].opt_prefix} ]; then
-  PIP='pip'
 fi
 
+# The third-party packages required for Peacock/ImageDIFF
 if [ -n \"$PIP\" ]; then
   GUI=`$PIP list 2>/dev/null | grep -c \"matplotlib\\|scipy\\|numpy\\|pandas\"`
 else
@@ -132,11 +116,8 @@ else
 fi
 
 # check if user applied the additional commands necessary to run Peacock
-if [ -d #{Formula["moose-peacock3"].opt_prefix} ] && [ $GUI -ge 4 ]; then
+if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ $GUI -ge 4 ]; then
   export MOOSEPEACOCK3=true
-  module load peacock3
-elif [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ $GUI -ge 4 ]; then
-  export MOOSEPEACOCK=true
   module load peacock
 fi
 
