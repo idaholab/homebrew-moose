@@ -58,7 +58,7 @@ proc ModulesHelp { } {
 }
 if { ! [ info exists ::env(MOOSEPEACOCK) ] && [ module-info command load ] } {
   puts stderr \"In order to use Peacock (python3), perform the following:\"
-  puts stderr \"\n\t`brew install moose-peacock3`\"
+  puts stderr \"\n\t`brew install moose-peacock`\"
   puts stderr \"\t`pip3 install numpy scipy matplotlib pandas`\n\"
   puts stderr \"Once complete, reload your terminals and verify this module\"
   puts stderr \"is loaded using `module list`.\"
@@ -104,7 +104,7 @@ if [ -d #{Formula["moose"].opt_prefix} ]; then
 fi
 
 # Determine if VTK/Peacock, can load or can be loaded
-if [ -d #{Formula["moose-peacock3"].opt_prefix} ] || [ -d #{Formula["moose-vtkmesa"].opt_prefix} ]; then
+if [ -d #{Formula["moose-peacock"].opt_prefix} ] || [ -d #{Formula["moose-vtkmesa"].opt_prefix} ]; then
   PIP='pip3'
 fi
 
@@ -117,7 +117,7 @@ fi
 
 # check if user applied the additional commands necessary to run Peacock
 if [ -d #{Formula["moose-peacock"].opt_prefix} ] && [ $GUI -ge 4 ]; then
-  export MOOSEPEACOCK3=true
+  export MOOSEPEACOCK=true
   module load peacock
 fi
 

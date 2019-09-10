@@ -3,7 +3,7 @@ class MoosePeacock < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-peacock.tar.gz"
   sha256 "3849cb25f486b811b965ef6661bbd9b0c4f5017a6696fcf8c7601a2fa4ca62cf"
-  revision 2
+  revision 3
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
