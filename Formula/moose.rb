@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 12
+  revision 13
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -46,7 +46,7 @@ setenv F77 mpif77
 
     # Get Major/Minor python version for VTK/lib python directory
     pyver = Language::Python.major_minor_version "python3"
-    py_prefix = Formula["python3"].opt_frameworks/"Python.framework/Versions/#{pyver}"
+    py_prefix = Formula["python"].opt_frameworks/"Python.framework/Versions/#{pyver}"
 
     # Create Peacock module
     # Correct the site-packages path until https://github.com/Homebrew/homebrew-core/issues/43953 is solved
@@ -59,7 +59,7 @@ proc ModulesHelp { } {
 if { ! [ info exists ::env(MOOSEPEACOCK) ] && [ module-info command load ] } {
   puts stderr \"In order to use Peacock (python3), perform the following:\"
   puts stderr \"\n\t`brew install moose-peacock`\"
-  puts stderr \"\t`pip3 install numpy scipy matplotlib pandas`\n\"
+  puts stderr \"\t`pip3 install scikit-image pandas`\n\"
   puts stderr \"Once complete, reload your terminals and verify this module\"
   puts stderr \"is loaded using `module list`.\"
   exit 0
@@ -80,7 +80,7 @@ proc ModulesHelp { } {
 if { ! [ info exists ::env(MESA_OFFSCREEN) ] && [ module-info command load ] } {
   puts stderr \"In order to use off-screen rendering, perform the following:\"
   puts stderr \"\n\t`brew install moose-vtkmesa`\"
-  puts stderr \"\t`pip3 install numpy scipy matplotlib pandas`\n\"
+  puts stderr \"\t`pip3 install scikit-image pandas`\n\"
   puts stderr \"Once complete, reload your terminals and load this module again.\"
   puts stderr \"It may also first be necessary to unload the peacock module.\"
   exit 0
