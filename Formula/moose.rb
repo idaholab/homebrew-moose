@@ -3,7 +3,7 @@ class Moose < Formula
   homepage "https://mooseframework.org"
   url "http://mooseframework.org/source_packages/moose-modules.tar.gz"
   sha256 "444cc515c75966135975ae439875c43001d9631a6c0c5ee2477d0eecf77e643b"
-  revision 13
+  revision 14
 
   keg_only "we want to leverage the module load command"
   depends_on "modules"
@@ -46,12 +46,10 @@ setenv F77 mpif77
 
     # Get Major/Minor python version for VTK/lib python directory
     pyver = Language::Python.major_minor_version "python3"
-    py_prefix = Formula["python"].opt_frameworks/"Python.framework/Versions/#{pyver}"
+    py_prefix = Formula["python3"].opt_frameworks/"Python.framework/Versions/#{pyver}"
 
     # Create Peacock module
-    # Correct the site-packages path until https://github.com/Homebrew/homebrew-core/issues/43953 is solved
-    python_path = "#{Formula["vtk"].opt_prefix}/lib/usr/local/Cellar/vtk/8.2.0_2/lib/python3/site-packages"
-    # python_path = "#{Formula["vtk"].opt_prefix}/lib/python#{pyver}/site-packages"
+    python_path = "#{Formula["vtk"].opt_prefix}/lib/python#{pyver}/site-packages"
     peacock_module = """#%Module1.0#####################################################################
 proc ModulesHelp { } {
   puts stderr \"Enables libraries needed for Peacock functionality.\"
