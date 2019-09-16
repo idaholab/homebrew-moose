@@ -1,8 +1,8 @@
 class MooseLibmesh < Formula
   desc "The libMesh library provides a framework for the numerical simulation of partial differential equations."
   homepage "https://libmesh.github.io/"
-  url "https://github.com/libmesh/libMesh.git", :revision => "ca543b0a6d9af487d4b7d1e64b890aa777a3bb9c"
-  version "ca543b0-1"
+  url "https://github.com/libmesh/libMesh.git", :revision => "19e96cb6ce080554cb10910c3b49a0b3c7142403"
+  version "19e96cb-1"
 
   bottle do
     root_url "https://mooseframework.org/source_packages"
@@ -35,17 +35,21 @@ class MooseLibmesh < Formula
     ENV["CXX"] = "mpicxx"
     ENV["F77"] = "mpif77"
     ENV["FC"] = "mpif90"
-    system "./configure", "--prefix=#{prefix}",
-           "--with-methods=#{methods}",
-           "--enable-silent-rules",
-           "--enable-unique-id",
-           "--disable-warnings",
-           "--with-thread-model=openmp",
-           "--disable-maintainer-mode",
-           "--enable-petsc-hypre-required",
-           "--enable-metaphysicl-required",
-           "--with-vtk-lib=#{vtk_lib}",
-           "--with-vtk-include=#{vtk_include}"
+    args = %W[
+    --prefix=#{prefix}
+    --with-methods=#{methods}
+    --enable-silent-rules
+    --enable-unique-id
+    --disable-warnings
+    --enable-glibcxx-debugging
+    --with-thread-model=openmp
+    --disable-maintainer-mode
+    --enable-petsc-hypre-required
+    --enable-metaphysicl-required
+    --with-vtk-lib=#{vtk_lib}
+    --with-vtk-include=#{vtk_include}
+    ]
+    system "./configure", *args
     system "make", "all"
     system "make", "install"
 
